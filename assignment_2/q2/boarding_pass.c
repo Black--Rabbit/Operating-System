@@ -1,0 +1,37 @@
+#include "main_header.h"
+#include <time.h>
+
+	static unsigned int seat_nr;
+
+	void boarding_pass (pid_t wg)
+	{		
+		
+		FILE *file_ptr;
+		run:
+			file_ptr = fopen("pointer.txt","r");
+			passenger *pas;
+			fscanf (file_ptr, "%p", &pas);
+			fclose (file_ptr);
+			
+			seat_nr++;
+			FILE *ptr = fopen ((pas -> ticket_nr),"w");
+		
+			fprintf (ptr, "First Name : %s\tLast Name : %s\tAge : %d\tSex : %c\tSeat Number : %d\t", (pas -> first_name), (pas -> last_name), (pas -> age), (pas -> gender), seat_nr);
+			fflush (ptr);
+		
+			char *meal_opt[3] = {"VEG", "NON-VEG", "ASIAN-VEG"};
+			time_t seconds;
+			time (&seconds);
+			srand ((unsigned int)seconds);
+			int  meal = rand() % 3;
+		
+			fprintf (ptr, "Meal : %s\t", meal_opt[meal]);
+			fflush (ptr);
+			fclose (ptr);
+			
+			usleep (1000);
+			kill (wg, SIGCONT);		
+			kill (getpid(), SIGSTOP);
+		goto run;		
+		
+	}

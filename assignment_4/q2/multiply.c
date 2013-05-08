@@ -1,0 +1,29 @@
+#include "header.h"
+
+	cmp_num multiply(cmp_num a, cmp_num b)
+	{
+		cmp_num result;
+		result.real = ((a.real * b.real) - (a.img * b.img));
+		result.img = ((a.real * b.img) + (a.img * b.real));
+		
+		return result;
+	}
+	
+	void *multiply_all(void *args)
+	{
+	
+
+		int *x = (int*)args;
+		
+//		printf("## i = %d\n", *x);
+//		printf("%d. (%d %d) * (%d %d)\t", *x, arr[2 * (*x)].real, arr[2 * (*x)].img, arr[2 * (*x) + 1].real, arr[2 * (*x) + 1].img );
+//		fflush(stdout);
+		cmp_num ans = multiply(arr[2 * (*x)], arr[2 * (*x) + 1]);	//multiplying A[2*i] and A[2*i+1]
+		
+//		printf("!!%d %d\n", ans.real, ans.img);
+		
+		result[*x] = ans;
+		
+//		printf("%d. ans = (%d %d)\n", *x, ans.real, ans.img);	
+//		fflush(stdout);
+	}

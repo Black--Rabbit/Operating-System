@@ -1,0 +1,41 @@
+Assignment 3 question 1
+
+Name : Abhinav Misra
+ID : 2011B2A7580G
+		  		  
+List of Files:
+	1. main.c : The main driver program which takes input and calls execute function which will execute all the commands.
+	2. dependency.c	: This has two functions which will count the number of options and the other will 
+			  freeup all the dynamically allocated memory.
+	3. header.h : Header file to help link other files.
+	4. Makefile : Will be required to compile the code and generate an executable called 'exec'
+	
+Compiling :
+	$make
+Execute : 
+	$./exec <input file>
+	
+		  
+Assumptions:
+
+	1. Name of the input file will be specified as a command line argument.
+	2. Command Dependency Environment Variable are all TAB seperated.
+	3. All Options are SPACE seperated.
+	4. If no options are present then NULL (not NULL = 0) will be specified.
+	5. If no path is specified then by default /bin:/sbin/:/etc/:/home/usr/ will be taken.
+	6. The path specified should not be '/' ended.
+	7. Lastly it is assumed that at all times there will be super user priveleges.
+	
+Sample Input:
+7
+ls	-	/bin	-l -a -x
+ps	ls	/bin	-e ax
+echo	-	-	hello
+pwd	echo	/bin	NULL
+who	pwd	-	-d
+cat	ls	-	input1.txt
+ifconfig	ls	/sbin	NULL
+
+	
+
+		 

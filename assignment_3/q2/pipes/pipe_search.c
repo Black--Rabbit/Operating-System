@@ -1,0 +1,163 @@
+/* pipe_search.c */
+/*
+ * Author : Siddharth Mohan Misra
+ */
+
+/*
+ * This is the file where search function is implemented 
+ */
+
+#include "header.h"
+
+	void search(char *cwd, char *file)
+	{
+	
+		if(chdir(cwd) == -1)		// check if there are sufficient permissions to open the file.
+		{
+			if(!fork())
+			{
+				char *arg[] = {"chmod", "777", cwd, 0};
+				execv("/bin/chmod", arg);
+				exit(0);
+			}
+			wait(NULL);
+		}
+		
+		FILE *fp;	//file pointer which will point to output fopen()
+		
+		int pipe_var[2];
+		pipe(pipe_var);
+		
+		int nr_files;		// number of files in the current working directory
+		
+		pid_t proc_ls;
+		
+		proc_ls = fork();
+		
+		if(!proc_ls)
+		{
+			int inner_pipe[2];
+			pipe(inner_pipe);
+			
+			if(!fork())
+			{
+				close(inner_pipe[0]);
+				close(fileno(stdout));
+				dup(inner_pipe[1]);
+				execl("/bin/ls", "ls", "-p", "--group-directories-first", 0);
+			}
+			else
+			{
+				wait(NULL);
+				close(inner_pipe[1]);
+				close(fileno(stdin));
+				dup(inner_pipe[0]);
+				close(pipe_var[0]);
+				close(fileno(stdout));
+				dup(pipe_var[1]);
+				execl("/bin/grep", "grep", "-c", "\0",  0);		// total number of files in the current working directory
+			}
+		}
+		wait(NULL);
+		close(pipe_var[1]);
+		close(fileno(stdin));
+		dup(pipe_var[0]);
+		scanf("%d", &nr_files);
+		
+		int pipe_var_2[2];
+		pipe(pipe_var_2);
+		
+		if(!fork())
+		{
+			close(pipe_var_2[0]);
+			close(fileno(stdout));
+			dup(pipe_var_2[1]);
+			execl("/bin/ls", "ls", "-p", "--group-directories-first", 0);
+		}
+		
+		wait(NULL);
+		close(pipe_var_2[1]);
+		fp = fdopen(pipe_var_2[0], "r");	//file pointer to read the files / directories in the current directory
+		
+		int file_found = 0;
+		
+		int index = 0;
+		while(index < nr_files)
+		{
+			char file_name[100];
+			fscanf(fp, "%s", file_name);
+			if(!strcmp(file_name, file))	// check if file is present
+			{
+				file_found = 1;
+				break;
+			}
+			index++;
+		}
+			
+		fclose(fp);
+		
+		if(file_found)
+		{
+			FILE *flag_file = fopen("/home/user/student/question2/pipes/flag.txt", "r+");
+			int flag;
+			fscanf(flag_file, "%d", &flag);
+			
+			if(flag)
+			{
+				fclose(flag_file);
+				exit(0);
+			}
+			else
+			{
+				rewind(flag_file);
+				fprintf(flag_file, "%d", 1);
+				fclose(flag_file);
+				
+				FILE *path_file = fopen("/home/user/student/question2/pipes/path.txt", "w");
+				fprintf(path_file, "%s%s", cwd, file);
+				fclose(path_file);
+				
+				exit(0); 
+			}			
+		
+		}
+		else
+		{
+			int pipe_var_3[2];
+			pipe(pipe_var_3);
+			
+			if(!fork())
+			{
+				close(pipe_var_3[0]);
+				close(fileno(stdout));
+				dup(pipe_var_3[1]);
+				execl("/bin/ls", "ls", "-p", "--group-directories-first", 0);
+			}
+		
+			wait(NULL);
+			close(pipe_var_3[1]);
+			fp = fdopen(pipe_var_3[0], "r");	//file pointer to iterate through the directories
+			
+			index = 0;
+			while(index++ < nr_files)
+			{
+				char directory[100];
+				fscanf(fp, "%s", directory);
+								
+				if(directory[strlen(directory) - 1] != '/')	// if not a directory then break the loop
+					break;
+				char temp[500];
+				strcpy(temp, cwd);
+				strcat(temp, directory);
+				
+				if(!fork())
+					search(temp, file);
+			}
+			while(wait(NULL) != -1);
+			fclose(fp);
+			exit(0);
+		}
+	}
+		
+		
+

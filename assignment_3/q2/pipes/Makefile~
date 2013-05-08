@@ -1,0 +1,7 @@
+exec: pipe_search.o delete.c pipe_main.c
+	gcc -o exec delete.o pipe_search.o pipe_main.c
+delete.o: delete.c
+	gcc -c delete.c
+pipe_search.o: pipe_search.c
+	gcc -c pipe_search.c
+

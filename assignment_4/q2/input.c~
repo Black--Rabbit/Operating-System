@@ -1,0 +1,18 @@
+#include "header.h"
+
+	void take_input(char *file_name)
+	{
+		FILE *fp = fopen(file_name, "r");
+		fscanf(fp, "%d", &N);
+		
+		arr = (cmp_num*)malloc(sizeof(cmp_num) * N);
+		
+		int j = 0;
+		for(; j < N; j++)
+		{
+			char sign, iota;
+			fscanf(fp, "%d%c%c%d", &(arr[j].real), &sign, &iota, &(arr[j].img));
+		}
+		
+		fclose(fp);	
+	}

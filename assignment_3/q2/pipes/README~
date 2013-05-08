@@ -1,0 +1,71 @@
+Assignment 3 question 2
+
+Name : Abhinav Misra
+ID : 2011B2A7580G
+		  		  
+List of Files:
+	1. pipe_main.c : This the main driving program which will take input and call the search function.
+	2. pipe_search.c : This file stores the search function which will use pipes and dupes to find the file.
+	3. header.h : Is the header file to link the other files
+	4. delete.c : Has move funtion to move files.
+	4. Makefile : Will compile the code.
+	
+Compiling :
+	$make
+Execute : 
+	$./exec <file name> <id number> <new marks>
+	
+Directory Structure:
+
+						/
+						|
+						V
+					       home
+					        |
+					        V
+					       user
+					        |
+					        V
+				   --------------------------------	
+				   |				  |
+				   V				  V
+				evaluator		        student
+				   |				   |
+				   V				   V
+		         has n number of evaluators	         question2
+		         					    |
+		         					    V
+		         				pipe and files of part with dup
+		         				
+		         				
+	There are 2 groups evaluator and student
+	evaluator1, evaluator2 n so are a part of evaluator group.
+	student is a part of student group.
+	All these users have their home directories inside user.
+	
+Sample Input:
+	[root@siddharth pipes]# ./exec OS_Marks.txt 2010C6PS477G 34.5
+
+To Check the ouptut : if
+	.
+	├── evaluator1
+	└── evaluator2
+	    ├── asdf
+	    │   ├── qwer
+	    │   └── xyz
+	    │       └── lkj
+	    │           └── OS_Marks.txt
+	    └── test.txt	
+
+	[root@siddharth pipes]# cat /home/user/evaluator/evaluator2/asdf/xyz/lkj/OS_Marks.txt | grep 477
+	2010C6PS477G	34.5
+				  
+Assumptions:
+
+	1. At all times there are super user priveleges.
+	2. The program resides in /home/user/student/question2/pipes/
+	3. IDs and marks in the file are TAB seperated
+
+	
+
+		 
