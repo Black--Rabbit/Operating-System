@@ -1,8 +1,9 @@
-
 A system call is written which takes two values and performs the following operations:
 
 
 1)
+
+
                                     precondition 1:   3<Num1<1000
                                     
                                     precondition 2:   3<Num2<1000
@@ -14,6 +15,8 @@ A system call is written which takes two values and performs the following opera
                      
                      
 2)                     
+
+
                     Finds out whether Num1 is a product of two prime numbers
                     
                     Finds out whether Num2 is a product of two prime numbers
